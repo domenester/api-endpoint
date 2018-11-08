@@ -6,7 +6,7 @@ const { combine, timestamp, label, printf } = winston.format;
 const defaultFormat = printf((info) => `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`);
 const level: winstonLevels = "info";
 
-export default (): winston.Logger => winston.createLogger({
+export default winston.createLogger({
   format: combine(
       label({ label: "Global" }),
       timestamp(),

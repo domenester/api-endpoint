@@ -8,7 +8,7 @@ class Database {
   private uri: string;
 
   constructor(uri: string) {
-    this.logger = Logger();
+    this.logger = Logger;
     this.uri = uri;
   }
 

@@ -1,3 +1,5 @@
+import * as bodyParser from "body-parser";
+import { NextHandleFunction } from "connect";
 import * as dotenv from "dotenv";
 import * as express from "express";
 import {ErrorRequestHandler} from "express-serve-static-core";
@@ -5,7 +7,7 @@ import * as http from "http";
 import * as path from "path";
 import * as winston from "winston";
 import EndpointsApi from "./components/endpoint/index";
-import {errorGenerator, errorHandler} from "./components/error/error";
+import {errorGenerator, errorHandler, IErrorGenerator} from "./components/error/error";
 import {default as Logger} from "./components/logger/logger";
 import Database from "./database/database";
 
@@ -29,7 +31,7 @@ class Server {
 
     constructor() {
         this.app = express();
-        this.logger = Logger();
+        this.logger = Logger;
         this.errorHandler = errorHandler(this.logger);
     }
 
@@ -37,7 +39,7 @@ class Server {
       try {
         await this.middlewares();
         await this.exposeEndpoints();
-        await database.start();
+        // await database.start();
         this.server = this.app.listen(this.port, this.host, () => {
           this.logger.info(`Listening to: http://${this.host}:${this.port}`);
         });
@@ -52,8 +54,9 @@ class Server {
     }
 
     private middlewares(): Promise<any> {
-      const middlewares = [
-        // middlewares go here
+      const middlewares: Array<ErrorRequestHandler | NextHandleFunction> = [
+        bodyParser.json({ limit: "5mb" }),
+        bodyParser.urlencoded({ extended: true, limit: "5mb" }),
       ];
 
       if (process.env.NODE_ENV === "development") {
@@ -75,22 +78,28 @@ class Server {
           endpointApi.endpoints.map((endpoint) => {
             const endpointPath = `${endpointApi.path}${endpoint.path}`;
             this.app[endpoint.method](endpointPath, async (req, res) => {
-              try {
-                if ( (endpoint.method === "post" || endpoint.method === "put") && !req.body) {
-                  // tslint:disable-next-line:max-line-length
-                  const message = `Requisição sem corpo para método ${endpoint.method.toUpperCase()} no endereço ${endpointPath}`;
-                  this.logger.error(message);
-                  return res.status(400).json(message);
-                }
-                const result = await endpoint.handler({
-                  body: req.body,
-                  headers: req.headers,
-                  parameters: req.params,
-                });
-                return res.json(result);
-              } catch (err) {
-                return res.json(err.code).send(err);
+              if ( (endpoint.method === "post" || endpoint.method === "put") && !req.body) {
+                // tslint:disable-next-line:max-line-length
+                const message = `Requisição sem corpo para método ${endpoint.method.toUpperCase()} no endereço ${endpointPath}`;
+                this.logger.error(message);
+                return res.status(400).json(message);
               }
+              const result = await endpoint.handler({
+                body: req.body || {},
+                headers: req.headers,
+                parameters: req.query,
+              });
+
+              if (result instanceof Error) {
+                const error = result as any;
+                return res.status(error.code).send({
+                  code: error.code,
+                  message: error.message,
+                  stack: error.stack,
+                } as IErrorGenerator);
+              }
+
+              return res.json(result);
             });
           });
         });

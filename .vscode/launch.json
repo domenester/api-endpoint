@@ -13,9 +13,26 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/src/main.js",
-      "preLaunchTask": "tsc: build - tsconfig.json",
+      "name": "Mocha Test - Epicall Log",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": ["-r", "ts-node/register", "${relativeFile}"],
+      "cwd": "${workspaceRoot}",
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "env": {
+        "NODE_ENV": "test",
+        "PORT": "3000"
+      }
+    },
+    {
+      "name": "Current TS File - Epicall Log",
+      "type": "node",
+      "request": "launch",
+      "args": ["${relativeFile}"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "program": "${workspaceRoot}/dist/main",
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
       ]

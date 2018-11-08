@@ -6,7 +6,7 @@
   "scripts": {
     "start": "if [ ! -d '/node_modules' ]; then npm i; export NODE_ENV=production && npm run build && node .; fi",
     "dev": "export NODE_ENV=development && npm run build && node .",
-    "test": "export NODE_ENV=test && mocha -r ts-node/register src/server.spec.ts --exit",
+    "test": "export NODE_ENV=test && mocha -r ts-node/register src/**/*.spec.ts --exit",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
     "push": "git add . && git commit -m \"Saving Progress\" && git push"
@@ -19,6 +19,7 @@
     "@types/mocha": "^5.2.5",
     "@types/mongodb": "^3.1.4",
     "@types/mongoose": "^5.2.9",
+    "@types/node": "^10.12.3",
     "@types/request": "^2.47.1",
     "@types/winston": "^2.3.9",
     "chai": "^4.1.2",
@@ -32,10 +33,16 @@
     "winston": "^3.0.0"
   },
   "dependencies": {
+    "@types/body-parser": "^1.17.0",
     "@types/dotenv": "^4.0.3",
+    "@types/joi": "^14.0.0",
     "@types/request-promise": "^4.1.42",
+    "@types/uuid": "^3.4.4",
+    "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
+    "joi": "^14.0.4",
     "mongoose": "^5.2.12",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "uuid": "^3.3.2"
   }
 }
