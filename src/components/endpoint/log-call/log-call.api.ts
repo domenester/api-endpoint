@@ -2,18 +2,18 @@
 import {Request} from "express-serve-static-core";
 import * as winston from "winston";
 import {IEndpoint, IEndpointAPI} from "../../endpoint/endpoint.interface";
-import LogAccessInsert from "./endpoints/log-access-insert";
+import LogCallInsert from "./endpoints/log-call-insert";
 
-class LogApi implements IEndpointAPI {
-  public path = "/log-access";
+class LogCallApi implements IEndpointAPI {
+  public path = "/log-call";
   public endpoints: Array<IEndpoint<Request, any>>;
   private logger: winston.Logger;
   constructor(logger: winston.Logger) {
     this.logger = logger;
     this.endpoints = [
-      new LogAccessInsert(this.logger),
+      new LogCallInsert(this.logger),
     ];
   }
 }
 
-export default LogApi;
+export default LogCallApi;

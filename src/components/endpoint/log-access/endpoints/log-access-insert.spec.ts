@@ -47,7 +47,8 @@ describe("Testing Log Access Insert", async () => {
   it(`should insert an item into ${LOG_ACCESS.name}`, async () => {
     const body = { isLogoff: true, userId: "anyuser" };
     const response = await requestInsertLogAccess(body);
-    expect(response.data).to.be.not.null;
+    expect(response.data[LOG_ACCESS.fields.userId.value]).to.be.equal(body.userId);
+    expect(response.data[LOG_ACCESS.fields.isLogoff.value]).to.be.equal(body.isLogoff);
   });
 
   it("should drop tables used for tests", async () => {

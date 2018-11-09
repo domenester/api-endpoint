@@ -1,5 +1,6 @@
 import * as bodyParser from "body-parser";
 import { NextHandleFunction } from "connect";
+import * as cors from "cors";
 import * as dotenv from "dotenv";
 import * as express from "express";
 import {ErrorRequestHandler} from "express-serve-static-core";
@@ -57,6 +58,7 @@ class Server {
       const middlewares: Array<ErrorRequestHandler | NextHandleFunction> = [
         bodyParser.json({ limit: "5mb" }),
         bodyParser.urlencoded({ extended: true, limit: "5mb" }),
+        cors(),
       ];
 
       if (process.env.NODE_ENV === "development") {

@@ -24,13 +24,13 @@ export default class LogAccessInsert implements IEndpoint<Request, {}> {
     }
 
     const logAccessTable = LogAccessInstance(process.env.DATABASE_URI);
-
+    await logAccessTable.sequelize.sync().catch((err) => err);
     const itemCreated = await logAccessTable.getModel().create({
       [LOG_ACCESS.fields.id.value] : uuid(),
       [LOG_ACCESS.fields.userId.value]: req.body.userId,
       [LOG_ACCESS.fields.isLogoff.value]: req.body.isLogoff,
       [LOG_ACCESS.fields.createdAt.value]: Date.now(),
-    });
+    }).catch((err) => err);
 
     return {data: itemCreated};
   }
