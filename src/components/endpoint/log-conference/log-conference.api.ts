@@ -5,7 +5,7 @@ import {IEndpoint, IEndpointAPI} from "../../endpoint/endpoint.interface";
 import LogConferenceInsert from "./endpoints/log-conference-insert";
 
 class LogConferenceApi implements IEndpointAPI {
-  public path = "/log-conference-participant";
+  public path = "/log-conference";
   public endpoints: Array<IEndpoint<Request, any>>;
   private logger: winston.Logger;
   constructor(logger: winston.Logger) {
