@@ -13,7 +13,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Mocha Test - Epicall Log",
+      "name": "Mocha Test",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": ["-r", "ts-node/register", "${relativeFile}"],
       "cwd": "${workspaceRoot}",
@@ -24,7 +24,7 @@
       }
     },
     {
-      "name": "Current TS File - Epicall Log",
+      "name": "Current TS File",
       "type": "node",
       "request": "launch",
       "args": ["${relativeFile}"],

@@ -31,8 +31,12 @@ export const errorHandler = (Logger: winston.Logger): ErrorRequestHandler => {
   return e.handler;
 };
 
-export const errorGenerator = (message: string, code: number, stack: string): Error => {
-  const error = new Error(message) as IErrorGenerator;
+export const errorGenerator = (
+  message: string = "Error message not defined",
+  code: number = 500,
+  stack: string = "EpicallError"): Error => {
+  const error: any = new Error(message);
+  // console.log("errorGenerator", error);
   error.code = code;
   error.stack = stack;
   return error;

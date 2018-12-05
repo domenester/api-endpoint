@@ -1,0 +1,3 @@
+apps:
+  - script   : dist/main.js
+    name: 'epicall-backoffice-backend'

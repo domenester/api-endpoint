@@ -3,14 +3,15 @@
         "module": "commonjs",
         "esModuleInterop": false,
         "target": "es6",
-        "noImplicitAny": true,
+        "lib": ["es6"],
         "moduleResolution": "node",
-        "sourceMap": true,
         "outDir": "dist",
-        "baseUrl": "."
+        "baseUrl": ".",
+        "sourceMap": true
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "src/**/*.mp3"
     ],
     "exclude": [
         "node_modules",

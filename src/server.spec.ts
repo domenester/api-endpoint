@@ -5,24 +5,25 @@ import "mocha";
 import * as request from "request-promise";
 import { promisify } from "util";
 import server from "./server";
+import { NODE_HOST, NODE_PORT } from "./config/env";
 
 describe("Testing Server", () => {
 
   it("should start server", async () => {
     await server.start();
-  });
+  }).timeout(10000);
 
   it("should request '/' and return any body", async () => {
     const env = process.env;
 
-    if (!env.NODE_HOST) { throw new Error("NODE_HOST env not defined"); }
-    if (!env.NODE_PORT) { throw new Error("NODE_PORT env not defined"); }
+    if (!NODE_HOST()) { throw new Error("NODE_HOST env not defined"); }
+    if (!NODE_PORT()) { throw new Error("NODE_PORT env not defined"); }
 
-    const body = await request(`http://${env.NODE_HOST}:${env.NODE_PORT}/`);
+    const body = await request(`http://${NODE_HOST()}:${NODE_PORT()}/`);
     expect(body).to.not.be.null;
   });
 
-  it("shoul stop server", () => {
+  it("should stop server", () => {
     server.stop();
   });
 
