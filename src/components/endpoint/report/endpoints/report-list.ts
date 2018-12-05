@@ -7,7 +7,6 @@ import { ReportQueries } from "../../../../database/queries";
 import { errorGenerator } from "../../../error";
 import { IReportList, IReportFilter } from "../../../../interfaces/report.interface";
 import { DATABASE_URI } from "../../../../database/utils/postgree";
-import { UserService } from "../../../../services";
 import { IUser } from "src/interfaces";
 
 const normalizeReport = (report: any) => ({
@@ -39,32 +38,6 @@ export default class Report implements IEndpoint<Request, {}> {
 
     let usernameByExtension = [];
     let usernamesByDepartment = [];
-
-    if (req.body.extension) {
-      const userByExtension = await UserService.getByExtension(req.body.extension) as IUser;
-      usernameByExtension.push(userByExtension.username);
-    }
-
-    if (req.body.department) {
-      const usersByDepartment = await UserService.getByDepartment(req.body.department) as Array<IUser>;
-      usernamesByDepartment = usersByDepartment.map((u) => u.username);
-    }
-
-    if (req.body.users) {
-      req.body.users = [
-        ...req.body.users, ...usernameByExtension, ...usernamesByDepartment
-      ]
-    } else {
-      req.body.users = [
-        ...usernameByExtension, ...usernamesByDepartment
-      ]
-    }
-    // req.body.users = [
-    //   ...new Set(
-    //     [...req.body.users, ...usernameByExtension, ...usernamesByDepartment]
-    //     .map(value => value)
-    //   )
-    // ]
 
     const client = new Client(DATABASE_URI());
     await client.connect().catch(err => errorGenerator(err));
